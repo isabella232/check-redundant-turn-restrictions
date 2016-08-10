@@ -3,7 +3,7 @@
 #include <ios>
 #include <locale>
 #include <tuple>
-#include <unordered_set>
+#include <vector>
 
 #include <osmium/handler.hpp>
 #include <osmium/osm/types.hpp>
@@ -37,12 +37,12 @@ struct Restriction {
 
   // Comparable
   friend bool operator==(const Restriction &lhs, const Restriction &rhs) {
-    return std::tie(lhs.from, lhs.via, lhs.to) == std::tie(rhs.from, rhs.via, rhs.to);
+    return std::tie(lhs.id, lhs.from, lhs.via, lhs.to) == std::tie(rhs.id, rhs.from, rhs.via, rhs.to);
   }
 };
 
 struct RestrictionHandler final : osmium::handler::Handler {
-  std::unordered_set<Restriction, boost::hash<Restriction>> restrictions;
+  std::vector<Restriction> restrictions;
 
   void relation(const osmium::Relation &rel) {
     // We only care for turn restrictions
@@ -119,6 +119,6 @@ struct RestrictionHandler final : osmium::handler::Handler {
     if (done != DoneWith::All)
       return;
 
-    restrictions.insert(std::move(out));
+    restrictions.push_back(std::move(out));
   }
 };
