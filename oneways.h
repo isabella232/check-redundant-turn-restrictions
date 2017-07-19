@@ -44,9 +44,10 @@ struct OnewayHandler final : osmium::handler::Handler {
       return;
 
     // Oneway values
-    const auto isOneway = std::strcmp("yes", oneway) == 0 || //
-                          std::strcmp("1", oneway) == 0 ||   //
-                          std::strcmp("true", oneway) == 0;
+    const auto isOneway = std::strcmp("yes", oneway) == 0 ||  //
+                          std::strcmp("1", oneway) == 0 ||    //
+                          std::strcmp("true", oneway) == 0 || //
+                          std::strcmp("-1", oneway) == 0;
 
     // Implied oneways
     const auto *junction = way.get_value_by_key("junction");
